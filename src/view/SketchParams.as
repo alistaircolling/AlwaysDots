@@ -10,5 +10,8 @@ package view {
 		public var smallestDotRadius : int;
 		public var dotRadiusIncrement : int;
 		public var rotateSpeed : int;
+		public var dotColor:int;
+		public var showCircles:Boolean;
+		public var dotAlpha:Number;
 	}
 }

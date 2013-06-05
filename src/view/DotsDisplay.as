@@ -1,4 +1,5 @@
 package view {
+	import flash.events.Event;
 	import flash.display.Shape;
 	import graphics.Drawing;
 	import flash.display.Sprite;
@@ -11,16 +12,29 @@ package view {
 		private var _sketchParams : SketchParams;
 		private var _circles : Array;
 		private var _holder : Sprite;
+		private var _bigHolder : Sprite;
 		public function DotsDisplay() {
 			
 			init();
 		}
 
 		private function init() : void {
-			_holder = new Sprite();
 			drawBG();
-			addChild(_holder);
+			_bigHolder = new Sprite();
+			_bigHolder.x = 150;
+			_bigHolder.y = 125;
+			addChild(_bigHolder);
+			_holder = new Sprite();
+			_holder.x = -150;
+			_holder.y = -125;
+			_bigHolder.addChild(_holder);
+			addEventListener(Event.ENTER_FRAME, oef);
 			
+		}
+
+		private function oef(event : Event) : void {
+			if (!_sketchParams) return;
+			_bigHolder.rotation += _sketchParams.rotateSpeed;
 		}
 
 		private function drawBG() : void {
@@ -41,6 +55,7 @@ package view {
 					_holder.removeChildAt(0);
 			}
 			
+			
 			_circles = new Array();
 						
 			for (var i : int = 0; i < _sketchParams.totalCirles; i++) {			
@@ -56,7 +71,9 @@ package view {
 		private function createNewCircle(i : int) : Circle {
 			//total dots, radius, dot radius
 			var retCircle:Circle = new Circle(_sketchParams.dotsPerCircle, 
-			_sketchParams.initialCircleRadius+(i*_sketchParams.spaceBetweenCircles), _sketchParams.smallestDotRadius+(i*_sketchParams.dotRadiusIncrement))
+			_sketchParams.initialCircleRadius+(i*_sketchParams.spaceBetweenCircles),
+			 _sketchParams.smallestDotRadius+(i*_sketchParams.dotRadiusIncrement), _sketchParams.dotColor,
+			  _sketchParams.showCircles, _sketchParams.dotAlpha);
 			return retCircle;
 		}
 	}

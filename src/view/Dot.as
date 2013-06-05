@@ -10,10 +10,12 @@ package view {
 		private var _radius : Number;
 		private var _color : int;
 		private var _graphic : Shape;
-		public function Dot(radius:Number, color:int = 0xff8ffa) {
+		public function Dot(radius:Number, color:int = 0xff8ffa, theAlpha:Number = 1) {
 			_radius = radius;
+			_color = color;
+			alpha = theAlpha;
 			init();
-			alpha = .3;
+			
 		}
 
 		private function init() : void {

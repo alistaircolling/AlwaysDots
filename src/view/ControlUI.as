@@ -1,16 +1,16 @@
 package view {
-	import utils.CustomEvent;
-	import flash.events.Event;
+	import flash.events.TimerEvent;
 	import hires.debug.Stats;
-	
 
 	import uk.co.soulwire.gui.SimpleGUI;
 
+	import utils.CustomEvent;
 	import utils.TextFieldUtils;
 
 	import flash.display.Sprite;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.utils.Timer;
 
 	/**
 	 * @author acolling
@@ -36,6 +36,7 @@ package view {
 		//movement
 		public var rotateSpeed : uint;
 		private var _stats : Stats;
+		private var _timer : Timer;
 		
 		
 		public function ControlUI() {
@@ -64,23 +65,29 @@ package view {
 
 			_gui.addGroup("     ");
 			_gui.addGroup("DOT PARAMETERS");
-			_gui.addSlider("sketchParams.smallestDotRadius", 1, 50, {label:"Smallest Dot Size", width:370, tick:1, callback:valueUpdated});
-			_gui.addSlider("sketchParams.dotRadiusIncrement", 1, 20, {label:"Dot Size Increment", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.smallestDotRadius", 1, 200, {label:"Smallest Dot Size", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.dotRadiusIncrement", 1, 50, {label:"Dot Size Increment", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.dotAlpha", 0, 1, {label:"Dot Alpha", width:370, tick:.1, callback:valueUpdated});
+			_gui.addColour("sketchParams.dotColor",{label:"Dot Color", callback:valueUpdated});
+			_gui.addToggle("sketchParams.showCircles", {label:"Show Circles",  callback:valueUpdated});
+			
 			
 			_gui.addGroup("     ");
 			_gui.addGroup("MOVEMENT");
-			_gui.addSlider("sketchParams.rotateSpeed", 1, 600, {label:"Rotate Speed", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.rotateSpeed", -5, 5 , {label:"Rotate Speed", width:370, tick:1, callback:valueUpdated});
 			
-			_gui.addButton("MAKE THE DOTS", {callback:startSimulation, width:160});
-			_gui.addButton("RESTART", {callback:reset, width:160});
+		
 			_gui.show();
-			sketchParams.dotRadiusIncrement = 0;
-			sketchParams.dotsPerCircle = 20;
+			sketchParams.dotRadiusIncrement = 36;
+			sketchParams.dotsPerCircle = 10;
 			sketchParams.initialCircleRadius =  40;
-			sketchParams.rotateSpeed = 10;
-			sketchParams.smallestDotRadius = 3;
-			sketchParams.spaceBetweenCircles = 20;
+			sketchParams.rotateSpeed = 1;
+			sketchParams.smallestDotRadius = 30;
+			sketchParams.spaceBetweenCircles = 70;
 			sketchParams.totalCirles = 4;
+			sketchParams.dotColor = 0xff00ff;
+			sketchParams.dotAlpha = .3;
+			sketchParams.rotateSpeed = 1;
 			_gui.hide();
 			_gui.show();
 			
@@ -98,6 +105,16 @@ package view {
 			_total.autoSize = TextFieldAutoSize.LEFT;
 			_total.text = "completed: 0";
 			_total.borderColor = 0xffffff;
+			
+			_timer = new Timer(500, 1);
+			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);
+			_timer.start();
+		}
+
+		private function onTimerComplete(event : TimerEvent) : void {
+			_timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTimerComplete);			
+			_timer = null;
+			sketchParams.initialCircleRadius = 40;
 			
 		}
 		
