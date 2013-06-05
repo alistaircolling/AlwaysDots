@@ -59,7 +59,7 @@ package view {
 			_gui.addSlider("sketchParams.totalCirles", 1, 10, {label:"Total Circles", width:370, tick:1, value:5, callback:valueUpdated});
 			
 			_gui.addSlider("sketchParams.dotsPerCircle", 1, 40, {label:"Dots per Circle", width:370, tick:1, callback:valueUpdated});
-			_gui.addSlider("sketchParams.initialCircleRadius", 1, 300, {label:"Initial Circle Radius", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.initialCircleRadius", 1, 300, {label:"Initial Circle Radius", width:370, tick:1, value:200, callback:valueUpdated});
 			_gui.addSlider("sketchParams.spaceBetweenCircles", 1, 150, {label:"Space Between Circles", width:370, tick:1, callback:valueUpdated});
 
 			_gui.addGroup("     ");
@@ -73,10 +73,19 @@ package view {
 			
 			_gui.addButton("MAKE THE DOTS", {callback:startSimulation, width:160});
 			_gui.addButton("RESTART", {callback:reset, width:160});
-	
-			
-			
 			_gui.show();
+			sketchParams.dotRadiusIncrement = 0;
+			sketchParams.dotsPerCircle = 20;
+			sketchParams.initialCircleRadius =  40;
+			sketchParams.rotateSpeed = 10;
+			sketchParams.smallestDotRadius = 3;
+			sketchParams.spaceBetweenCircles = 20;
+			sketchParams.totalCirles = 4;
+			_gui.hide();
+			_gui.show();
+			
+			
+
 
 			_total = TextFieldUtils.createTextField();
 			_total.x = 750;
@@ -94,7 +103,7 @@ package view {
 		
 		
 		public function valueUpdated() : void {
-			trace("ControlUI.valueUpdated()  ");
+		
 			var e:CustomEvent = new CustomEvent("valueUpdated");
 			dispatchEvent(e);
 		}

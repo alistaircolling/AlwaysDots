@@ -55,6 +55,7 @@
 
 		private function valueUpdatedListener(e:Event) : void {
 			trace("Main.valueUpdatedListener(e)  ");	
+			_display.valuesSet(_controls.sketchParams);
 		}
 	}
 }
