@@ -44,6 +44,17 @@
 			_holder.addChild(_controls);
 			
 			addChild(_holder);
+			
+			addListeners();
+		}
+
+		private function addListeners() : void {
+			_controls.addEventListener("valueUpdated", valueUpdatedListener)
+			
+		}
+
+		private function valueUpdatedListener(e:Event) : void {
+			trace("Main.valueUpdatedListener(e)  ");	
 		}
 	}
 }

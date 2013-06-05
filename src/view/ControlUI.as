@@ -1,4 +1,6 @@
 package view {
+	import utils.CustomEvent;
+	import flash.events.Event;
 	import hires.debug.Stats;
 	
 
@@ -56,18 +58,18 @@ package view {
 			_gui.addGroup("All CIRCLES");
 			_gui.addSlider("sketchParams.totalCirles", 1, 10, {label:"Total Circles", width:370, tick:1, value:5, callback:valueUpdated});
 			
-			_gui.addSlider("sketchParams.dotsPerCircle", 1, 40, {label:"Dots per Circle", width:370, tick:1});
-			_gui.addSlider("sketchParams.initialCircleRadius", 1, 300, {label:"Initial Circle Radius", width:370, tick:1});
-			_gui.addSlider("sketchParams.spaceBetweenCircles", 1, 150, {label:"Space Between Circles", width:370, tick:1});
+			_gui.addSlider("sketchParams.dotsPerCircle", 1, 40, {label:"Dots per Circle", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.initialCircleRadius", 1, 300, {label:"Initial Circle Radius", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.spaceBetweenCircles", 1, 150, {label:"Space Between Circles", width:370, tick:1, callback:valueUpdated});
 
 			_gui.addGroup("     ");
 			_gui.addGroup("DOT PARAMETERS");
-			_gui.addSlider("sketchParams.smallestDotRadius", 1, 50, {label:"Smallest Dot Size", width:370, tick:1});
-			_gui.addSlider("sketchParams.dotRadiusIncrement", 1, 20, {label:"Dot Size Increment", width:370, tick:1});
+			_gui.addSlider("sketchParams.smallestDotRadius", 1, 50, {label:"Smallest Dot Size", width:370, tick:1, callback:valueUpdated});
+			_gui.addSlider("sketchParams.dotRadiusIncrement", 1, 20, {label:"Dot Size Increment", width:370, tick:1, callback:valueUpdated});
 			
 			_gui.addGroup("     ");
 			_gui.addGroup("MOVEMENT");
-			_gui.addSlider("sketchParams.rotateSpeed", 1, 600, {label:"Rotate Speed", width:370, tick:1});
+			_gui.addSlider("sketchParams.rotateSpeed", 1, 600, {label:"Rotate Speed", width:370, tick:1, callback:valueUpdated});
 			
 			_gui.addButton("MAKE THE DOTS", {callback:startSimulation, width:160});
 			_gui.addButton("RESTART", {callback:reset, width:160});
@@ -93,6 +95,8 @@ package view {
 		
 		public function valueUpdated() : void {
 			trace("ControlUI.valueUpdated()  ");
+			var e:CustomEvent = new CustomEvent("valueUpdated");
+			dispatchEvent(e);
 		}
 		
 		public function startSimulation():void{
