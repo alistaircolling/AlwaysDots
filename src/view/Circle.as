@@ -1,4 +1,5 @@
 package view {
+	import flash.display.DisplayObject;
 	import graphics.Drawing;
 
 	import flash.display.Shape;
@@ -14,11 +15,11 @@ package view {
 		private var _dots : Array;
 		private var _dotHolder : Sprite;
 		private var _dotColor : uint;
-		private var _showCircles : *;
+		private var _showCircles : Boolean;
 		private var _dotAlpha : Number;
 
 		// total dots, radius, dot radius
-		public function Circle(dots : uint, radius : uint, dotRadius : uint, dotColor : uint = 0xffffff, showCircles = false, dotAlpha:Number = 0) {
+		public function Circle(dots : uint, radius : uint, dotRadius : uint, dotColor : uint = 0xffffff, showCircles:Boolean = false, dotAlpha:Number = 0) {
 			_showCircles = showCircles;
 			_totalDots = dots;
 			_dotAlpha = dotAlpha;
@@ -47,13 +48,18 @@ package view {
 			for (var i : int = 0; i < _totalDots; i++) {
 				var dot : Dot = new Dot(_dotRadius, _dotColor, _dotAlpha);
 				dot.x = (Math.cos(increment * i) * _radius);
-				;
-				// + _centerX;
 				dot.y = (Math.sin(increment * i) * _radius);
-				;
-				// + _centerX;
 				_dotHolder.addChild(dot);
 			}
+		}
+
+		public function getDots() : Array {
+			var dots:Array = [];
+			for (var i : int = 0; i < _totalDots; i++) {
+				var dot:DisplayObject = _dotHolder.getChildAt(i);
+				dots.push(dot);
+			}
+			return dots;
 		}
 	}
 }

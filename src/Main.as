@@ -1,13 +1,16 @@
 ﻿package 
 {
 	import hires.debug.Stats;
-	
+
+	import view.ControlUI;
+	import view.DotsDisplay;
+
+	import flash.display.Sprite;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import graphics.Drawing;
-	import view.DotsDisplay;
-	import view.ControlUI;
-	import flash.display.Sprite;
+	import flash.filters.BitmapFilter;
+	import flash.filters.BitmapFilterQuality;
+	import flash.filters.GlowFilter;
 
 	[SWF(width="1000", height="800", frameRate="30", backgroundColor="#000000")]
 	public class Main extends Sprite {
@@ -38,7 +41,7 @@
 			var stats:Stats = new Stats();
 			stats.x = _display.x+_bannerWidth;
 			stats.y = _display.y+ _bannerHeight- 100;
-			_controls.addChild(stats);
+		//	_controls.addChild(stats);
 			
 			_holder.addChild(_display);
 			_holder.addChild(_controls);
@@ -46,10 +49,18 @@
 			addChild(_holder);
 			
 			addListeners();
+			valueUpdatedListener(new Event("init"));
+			
+			 
+      
 		}
+		
+	
+		
 
 		private function addListeners() : void {
 			_controls.addEventListener("valueUpdated", valueUpdatedListener)
+			_controls.addEventListener("explode", explodeListener)
 			
 		}
 
@@ -57,5 +68,11 @@
 			trace("Main.valueUpdatedListener(e)  ");	
 			_display.valuesSet(_controls.sketchParams);
 		}
+		
+		private function explodeListener(e:Event) : void {
+			trace("Main.valueUpdatedListener(e)  ");	
+			_display.explode();
+		}
+		
 	}
 }
