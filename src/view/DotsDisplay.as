@@ -1,4 +1,10 @@
 package view {
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	import org.flintparticles.twoD.actions.RandomDrift;
+	import org.flintparticles.twoD.actions.Friction;
+	import flash.geom.Point;
+	import flash.display.DisplayObject;
 	import org.flintparticles.twoD.actions.Explosion;
 	import graphics.Drawing;
 
@@ -29,6 +35,7 @@ package view {
 		private var _emitter : Emitter2D;
 		private var _renderer : DisplayObjectRenderer;
 		private var _explosion : Explosion;
+		private var _timer : Timer;
 
 		public function DotsDisplay() {
 			init();
@@ -59,6 +66,7 @@ package view {
 			_renderer.x = 150;
 			_renderer.y = 125;
 			_renderer.addEmitter(_emitter);
+		//	_renderer.filters = [getBlurFilter()];// getBitmapFilter()];
 			addChild(_renderer);
 			_emitter.start();
 			
@@ -67,14 +75,37 @@ package view {
 		public function explode():void{
 			trace("DotsDisplay.explode()  ");
 			var arr:Array = getDots();
+			arr = setPositionGlobalToLocal(arr);
 			var particles:Vector.<Particle> = Particle2DUtils.createParticles2DFromDisplayObjects(arr);
 			_emitter.addParticles( particles, false );
 			_bigHolder.visible = false;			
-			
-			
-				_explosion = new Explosion( 100, 0, 0,600);
-				_emitter.addAction( _explosion );
-			
+			_explosion = new Explosion( _sketchParams.explosionPower, 0, 0,_sketchParams.expansionRate, _sketchParams.depth, _sketchParams.epsilon);
+			_emitter.addAction( _explosion );
+		//	_renderer.filters = [getBlurFilter()];// getBitmapFilter()];
+			_renderer.alpha = _sketchParams.dotAlpha;
+			_timer = new Timer(100);
+			_timer.addEventListener(TimerEvent.TIMER_COMPLETE, onTComplete);
+		//	_timer.start();
+			_emitter.addAction(new RandomDrift(30, 30));
+		}
+
+		private function onTComplete(event : TimerEvent) : void {
+			_timer.removeEventListener(TimerEvent.TIMER_COMPLETE, onTComplete);
+			_emitter.addAction(new Friction(_sketchParams.friction));
+		}
+
+		private function setPositionGlobalToLocal(arr : Array) : Array {
+			var retA:Array = [];
+			for (var i : int = 0; i < arr.length; i++) {
+				var dot:DisplayObject = arr[i] as DisplayObject;
+				var holder:DisplayObject = dot.parent;
+				var dotPos:Point = new Point(dot.x, dot.y)
+				var newPos:Point = holder.localToGlobal(dotPos);
+				dot.x = newPos.x-500;
+				dot.y = newPos.y-400;
+				retA.push(dot);
+			}
+			return retA;
 		}
 
 		private function getDots() : Array {			
@@ -102,6 +133,7 @@ package view {
 			_sketchParams = sketchParams;
 			setFilter();
 			generateCircles();
+			_bigHolder.visible = true;
 		}
 
 		private function setFilter() : void {
@@ -136,6 +168,10 @@ package view {
 			return new GlowFilter(color, alpha, blurX, blurY, strength, quality, inner, knockout);
 		}
 
+		public function getBlurFilter() : BlurFilter {
+		
+			return new BlurFilter(30,30,3);
+		}
 		public function generateCircles() : void {
 			trace("DotsDisplay.generateCircles()  ");
 

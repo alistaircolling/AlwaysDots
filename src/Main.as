@@ -38,6 +38,8 @@
 			
 			
 			_controls = new ControlUI();
+			_controls.x = 700;
+			_controls.y = -50;
 			var stats:Stats = new Stats();
 			stats.x = _display.x+_bannerWidth;
 			stats.y = _display.y+ _bannerHeight- 100;
@@ -65,12 +67,13 @@
 		}
 
 		private function valueUpdatedListener(e:Event) : void {
-			trace("Main.valueUpdatedListener(e)  ");	
+			
 			_display.valuesSet(_controls.sketchParams);
 		}
 		
 		private function explodeListener(e:Event) : void {
-			trace("Main.valueUpdatedListener(e)  ");	
+		
+			
 			_display.explode();
 		}
 		
